@@ -1,7 +1,8 @@
 #This is the slash commands, when the user writes a slash the commands show up
 from settings import TOKEN, GUILD_ID
 
-from typing import Optional
+from typing import Optional, Union
+import asyncio
 
 import discord
 from discord import app_commands
@@ -56,6 +57,68 @@ async def add(interaction: discord.Interaction, first_value: int, second_value: 
     """Adds two numbers together."""
     await interaction.response.send_message(f'{first_value} + {second_value} = {first_value + second_value}')
 
+@client.tree.command(name="poll", description="Creates a poll with up to 5 options. (Requires Manage Messages Permission)")
+@app_commands.checks.has_permissions(manage_messages=True)
+@app_commands.describe(question="What is the question the poll is gonna be asking?", option1="1st option that can be chosen", option2="2nd option that can be chosen", option3="3rd option that can be chosen", option4="4th option that can be chosen",option5="5th option that can be chosen")
+async def poll(interaction: discord.Interaction, question: str, option1: str, option2: str, option3:str=None, option4:str=None, option5:str=None,):
+    await interaction.response.send_message("Creating poll...", ephemeral=True)
+    try:
+        listen = [option1, option2, option3, option4, option5]
+        yonice = []
+        for i in listen:
+            if i != None:
+                yonice.append(i)
+
+        if len(yonice) == 2:
+            emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}")
+            msg=await interaction.channel.send(embed=emb)
+            await msg.add_reaction("1⃣")
+            await msg.add_reaction("2⃣")
+        elif len(yonice) == 3:
+            emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}")
+            msg=await interaction.channel.send(embed=emb)
+            await msg.add_reaction("1⃣")
+            await msg.add_reaction("2⃣") 
+            await msg.add_reaction("3⃣")
+        elif len(yonice) == 4:
+            emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}\nOption 4: {yonice[3]}")
+            msg=await interaction.channel.send(embed=emb)
+            await msg.add_reaction("1⃣")
+            await msg.add_reaction("2⃣") 
+            await msg.add_reaction("3⃣")
+            await msg.add_reaction("4⃣")
+        elif len(yonice) == 5:
+            emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}\nOption 4: {yonice[3]}\nOption 5: {yonice[4]}")
+            msg=await interaction.channel.send(embed=emb)
+            await msg.add_reaction("1⃣")
+            await msg.add_reaction("2⃣") 
+            await msg.add_reaction("3⃣")
+            await msg.add_reaction("4⃣")
+            await msg.add_reaction("5⃣")     
+            await msg.add_reaction("5⃣")
+        await interaction.delete_original_response()
+    except Exception as e:
+        print(e)
+        await interaction.delete_original_response()
+        await interaction.followup.send("An error occured, try again later.", ephemeral=True)
+
+
+@client.tree.command(name='channel-info')
+@app_commands.describe(channel='The channel to get info of')
+async def channel_info(interaction: discord.Interaction, channel: Union[discord.VoiceChannel, discord.TextChannel]):
+    """Shows basic channel info for a text or voice channel."""
+
+    embed = discord.Embed(title='Channel Info')
+    embed.add_field(name='Name', value=channel.name, inline=True)
+    embed.add_field(name='ID', value=channel.id, inline=True)
+    embed.add_field(
+        name='Type',
+        value='Voice' if isinstance(channel, discord.VoiceChannel) else 'Text',
+        inline=True,
+    )
+
+    embed.set_footer(text='Created').timestamp = channel.created_at
+    await interaction.response.send_message(embed=embed)
 
 # The rename decorator allows us to change the display of the parameter on Discord.
 # In this example, even though we use `text_to_send` in the code, the client will use `text` instead.

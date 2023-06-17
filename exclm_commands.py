@@ -68,13 +68,13 @@ async def _bot(ctx):
     """Is the bot cool?"""
     await ctx.send('Yes, the bot is cool.')
 
-@bot.slash_command(
-    name="greet",
-    description="Greet a user",
-    guild_ids=[GUILD_ID]
-)
-async def greet(ctx: commands.SlashContext):
-    await ctx.send(f"Hello, {ctx.author.mention}!")
+# @bot.slash_command(
+#     name="greet",
+#     description="Greet a user",
+#     guild_ids=[GUILD_ID]
+# )
+# async def greet(ctx: commands.SlashContext):
+#     await ctx.send(f"Hello, {ctx.author.mention}!")
 
 
 bot.run(TOKEN) 
