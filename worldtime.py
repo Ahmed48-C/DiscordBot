@@ -6,7 +6,7 @@ def worldtime(city):
 	querystring = {"city":city}
 
 	headers = {
-		"X-RapidAPI-Key": "9d3bd00d0fmsh299ee009acda650p1f6768jsn691079464863",
+		"X-RapidAPI-Key": "Your_RapidAPI_Key",
 		"X-RapidAPI-Host": "world-time-by-api-ninjas.p.rapidapi.com"
 	}
 
