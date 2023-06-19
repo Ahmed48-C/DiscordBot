@@ -3,9 +3,12 @@ from settings import TOKEN, GUILD_ID
 
 from typing import Optional, Union
 import asyncio
+from datetime import datetime
+import pytz
 
 import discord
 from discord import app_commands
+from worldtime import worldtime
 
 
 MY_GUILD = discord.Object(id=GUILD_ID)  # replace with your guild id
@@ -96,6 +99,18 @@ async def poll(interaction: discord.Interaction, question: str, option1: str, op
         await interaction.delete_original_response()
         await interaction.followup.send("An error occured, try again later.", ephemeral=True)
 
+@client.tree.command(name="time", description="get the current time")
+@app_commands.describe(
+    place='City',
+)
+async def time(interaction: discord.Interaction, place: str=None):
+    if place == None:
+        now = datetime.now()
+        timestamp = now.strftime("%I:%M %p")
+        await interaction.response.send_message(f'the current time is {timestamp}')
+    else:
+        time = worldtime(place)
+        await interaction.response.send_message(f'the current time of {place} is {time}')
 
 @client.tree.command(name='channel-info')
 @app_commands.describe(channel='The channel to get info of')
