@@ -57,6 +57,7 @@ async def add(interaction: discord.Interaction, first_value: int, second_value: 
     """Adds two numbers together."""
     await interaction.response.send_message(f'{first_value} + {second_value} = {first_value + second_value}')
 
+poll_emojis = ['1⃣','2⃣','3⃣','4⃣','5⃣']
 @client.tree.command(name="poll", description="Creates a poll with up to 5 options. (Requires Manage Messages Permission)")
 @app_commands.checks.has_permissions(manage_messages=True)
 @app_commands.describe(question="What is the question the poll is gonna be asking?", option1="1st option that can be chosen", option2="2nd option that can be chosen", option3="3rd option that can be chosen", option4="4th option that can be chosen",option5="5th option that can be chosen")
@@ -72,30 +73,23 @@ async def poll(interaction: discord.Interaction, question: str, option1: str, op
         if len(yonice) == 2:
             emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}")
             msg=await interaction.channel.send(embed=emb)
-            await msg.add_reaction("1⃣")
-            await msg.add_reaction("2⃣")
+            for i in range(len(yonice)):
+                await msg.add_reaction(poll_emojis[i])
         elif len(yonice) == 3:
             emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}")
             msg=await interaction.channel.send(embed=emb)
-            await msg.add_reaction("1⃣")
-            await msg.add_reaction("2⃣") 
-            await msg.add_reaction("3⃣")
+            for i in range(len(yonice)):
+                await msg.add_reaction(poll_emojis[i])
         elif len(yonice) == 4:
             emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}\nOption 4: {yonice[3]}")
             msg=await interaction.channel.send(embed=emb)
-            await msg.add_reaction("1⃣")
-            await msg.add_reaction("2⃣") 
-            await msg.add_reaction("3⃣")
-            await msg.add_reaction("4⃣")
+            for i in range(len(yonice)):
+                await msg.add_reaction(poll_emojis[i])
         elif len(yonice) == 5:
             emb=discord.Embed(color=discord.Colour.blurple(), title=f"{question}", description=f"Option 1: {yonice[0]}\nOption 2: {yonice[1]}\nOption 3: {yonice[2]}\nOption 4: {yonice[3]}\nOption 5: {yonice[4]}")
             msg=await interaction.channel.send(embed=emb)
-            await msg.add_reaction("1⃣")
-            await msg.add_reaction("2⃣") 
-            await msg.add_reaction("3⃣")
-            await msg.add_reaction("4⃣")
-            await msg.add_reaction("5⃣")     
-            await msg.add_reaction("5⃣")
+            for i in range(len(yonice)):
+                await msg.add_reaction(poll_emojis[i])
         await interaction.delete_original_response()
     except Exception as e:
         print(e)
